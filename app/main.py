@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.api.users import router as users_router
 
 # Create an instance of the FastAPI application
 app = FastAPI(
@@ -6,6 +7,8 @@ app = FastAPI(
     description="API for the task management system",
     version="1.0.0"
 )
+
+app.include_router(users_router, prefix="/users", tags=["Users"])
 
 # Define the root endpoint
 @app.get("/")
