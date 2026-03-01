@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, Field
 
 #Base schema for users
 class UserBase(BaseModel):
@@ -7,7 +7,7 @@ class UserBase(BaseModel):
     
 #Schema for create a user
 class UserCreate(UserBase):
-    password: str
+    password: str = Field(min_length=8, max_length=30)
     
 #Schema for response without password
 class UserResponse(UserBase):
