@@ -14,7 +14,7 @@ class TaskCreate(TaskBase):
 #Schema for response 
 class TaskResponse(TaskBase):
     id: int
-    is_complete: bool
+    is_completed: bool
     created_at: datetime
     owner_id: int
     
