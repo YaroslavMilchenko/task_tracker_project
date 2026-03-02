@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.api.users import router as users_router
+from app.api.auth import router as auth_router
 
 # Create an instance of the FastAPI application
 app = FastAPI(
@@ -9,6 +10,7 @@ app = FastAPI(
 )
 
 app.include_router(users_router, prefix="/users", tags=["Users"])
+app.include_router(auth_router, tags=["Auth"])
 
 # Define the root endpoint
 @app.get("/")
