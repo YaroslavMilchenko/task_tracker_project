@@ -14,8 +14,13 @@ class TaskCreate(TaskBase):
 #Schema for response 
 class TaskResponse(TaskBase):
     id: int
-    is_complete: bool
+    is_completed: bool
     created_at: datetime
     owner_id: int
     
     model_config = ConfigDict(from_attributes=True)
+    
+class TaskUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    is_completed: Optional[bool] = None
