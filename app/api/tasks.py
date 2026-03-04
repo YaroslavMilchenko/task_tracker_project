@@ -1,6 +1,6 @@
 from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 from app.db.database import get_db
 from app.db.models import User
 from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
@@ -16,13 +16,6 @@ async def create_new_task(
     current_user: User = Depends(get_current_user)
 ):
     return await task_service.create_task(db=db, task=task, user_id=current_user.id)
-
-@router.get("/", response_model=List[TaskResponse])
-async def read_tasks(
-    db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    return await task_service.get_user_tasks(db=db, user_id=current_user.id)
 
 @router.put("/{task_id}", response_model=TaskResponse)
 async def update_existing_task(
@@ -47,3 +40,21 @@ async def delete_task(task_id: int, db: AsyncSession = Depends(get_db), current_
     if not success:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
     return None
+
+@router.get("/", response_model=List[TaskResponse])
+async def read_tasks(
+    skip: int = 0,
+    limit: int = 100,
+    is_completed: Optional[bool] = None,
+    category_id: Optional[int] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return await task_service.get_user_tasks(
+        db=db,
+        user_id=current_user.id,
+        skip=skip,
+        limit=limit,
+        is_completed=is_completed,
+        category_id=category_id
+    )

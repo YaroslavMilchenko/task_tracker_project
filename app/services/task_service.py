@@ -10,10 +10,6 @@ async def create_task(db: AsyncSession, task: TaskCreate, user_id: int):
     await db.refresh(db_task)
     return db_task
 
-async def get_user_tasks(db: AsyncSession, user_id: int):
-    result = await db.execute(select(Task).where(Task.owner_id==user_id))
-    return result.scalars().all()
-
 async def get_task_by_id(db: AsyncSession, task_id: int, user_id: int):
     result = await db.execute(select(Task).where(Task.id==task_id, Task.owner_id==user_id))
     return result.scalars().first()
@@ -40,3 +36,25 @@ async def delete_task(db: AsyncSession, task_id: int, user_id: int):
     await db.delete(db_task)
     await db.commit()
     return True
+
+async def get_user_tasks(
+    db: AsyncSession,
+    user_id: int, 
+    skip: int = 0,
+    limit: int = 100,
+    is_completed: bool | None = None,
+    category_id: int | None = None
+    ):
+    
+    query = select(Task).where(Task.owner_id == user_id)
+    
+    if is_completed is not None:
+        query = query.where(Task.is_completed == is_completed)
+        
+    if category_id is not None:
+        query = query.where(Task.category_id == category_id)
+        
+    query = query.offset(skip).limit(limit)
+    
+    result = await db.execute(query)
+    return result.scalars().all()
