@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
+from sqlalchemy.sql import func
 from app.db.database import Base
 
 class User(Base):
@@ -25,6 +26,16 @@ class Task(Base):
     
     # Foreign key linking the task to a specific user
     owner_id = Column(Integer, ForeignKey("users.id"))
+    category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
     
     # Relationship back to the User model
     owner = relationship("User", back_populates="tasks")
+    category = relationship("Category", back_populates="tasks")
+    
+class Category(Base):
+    __tablename__ = "categories"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True, nullable=False)
+    
+    tasks = relationship("Task", back_populates="category")

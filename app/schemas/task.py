@@ -6,6 +6,7 @@ from datetime import datetime
 class TaskBase(BaseModel):
     title: str
     description: Optional[str] = None
+    category_id: Optional[int] = None
     
 #Schema for create new task
 class TaskCreate(TaskBase):
@@ -24,3 +25,4 @@ class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     is_completed: Optional[bool] = None
+    category_id: Optional[int] = None
