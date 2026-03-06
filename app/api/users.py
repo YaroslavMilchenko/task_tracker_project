@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
 from app.schemas.user import UserCreate, UserResponse
+from app.db.models import User
 from app.services import user_services
 from app.api.deps import get_current_user
 from app.services.email_service import send_welcome_email
