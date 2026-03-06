@@ -1,9 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
 from app.core.config import settings
+import os
 
-# Create the async engine to connect to PostgreSQL
-engine = create_async_engine(settings.DATABASE_URL, echo=True)
+ACTUAL_DATABASE_URL = os.getenv("DATABASE_URL", settings.DATABASE_URL)
+
+engine = create_async_engine(ACTUAL_DATABASE_URL, echo=True)
 
 # Create a factory for async sessions
 AsyncSessionLocal = async_sessionmaker(
